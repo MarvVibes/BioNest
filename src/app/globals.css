@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090d16;
-  --foreground: #f8fafc;
+  --background: #f9f9f8;
+  --foreground: #191919;
+  --brand-forest: #1e392a;
+  --brand-forest-hover: #162c20;
+  --brand-lime: #d2e823;
+  --brand-lime-hover: #c4d920;
+  --canvas-chalk: #f3f3f1;
+  --border-subtle: #e5e5e3;
+  --charcoal: #1e2330;
 }
 
 body {
@@ -10,6 +17,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .font-inter {
@@ -32,26 +40,41 @@ body {
   font-family: var(--font-playfair), serif;
 }
 
-/* Custom scrollbar for dashboard */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* Phone Mockup Frame Shadow & Bezel */
 .phone-mockup-frame {
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 12px #1e293b, 0 0 0 14px #0f172a;
+  box-shadow: 
+    0 20px 50px -10px rgba(0, 0, 0, 0.18),
+    0 0 0 10px #1e2330,
+    0 0 0 12px #0f121a;
 }
+
+/* Tactile button hover/active states */
+.btn-tactile {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-tactile:hover {
+  transform: translateY(-1px);
+}
+.btn-tactile:active {
+  transform: translateY(0) scale(0.98);
+}
+

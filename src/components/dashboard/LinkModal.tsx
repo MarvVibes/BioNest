@@ -102,50 +102,52 @@ export default function LinkModal({
       await onSave({
         ...payload,
         id: linkToEdit?.id,
+        is_active: linkToEdit ? linkToEdit.is_active : true,
       });
       onClose();
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Failed to save link');
+    } catch {
+      setErrorMsg('Failed to save link. Please check your connection.');
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
-        <div className="flex items-center justify-between mb-5">
-          <h3 className="text-lg font-bold text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <div className="relative w-full max-w-lg bg-white border border-[#E5E5E3] rounded-[32px] p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#E5E5E3]">
+          <h3 className="text-lg font-bold text-[#191919] tracking-tight">
             {linkToEdit ? 'Edit Link' : 'Add New Link'}
           </h3>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-full text-[#71716E] hover:text-[#191919] hover:bg-[#F3F3F1] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="mb-5 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-2.5 text-rose-300 text-xs animate-in fade-in">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="mb-5 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-700 text-xs animate-in fade-in">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
             <p>{errorMsg}</p>
           </div>
         )}
 
         {/* Link Type Selector Tabs */}
         {!linkToEdit && (
-          <div className="grid grid-cols-5 gap-1.5 mb-5 p-1 rounded-xl bg-slate-950/60 border border-slate-800">
+          <div className="grid grid-cols-5 gap-1 mb-6 p-1 rounded-2xl bg-[#F3F3F1] border border-[#E5E5E3]">
             <button
               type="button"
               onClick={() => {
                 setType('standard');
                 if (!title) setTitle('Visit Website');
               }}
-              className={`py-2 px-1 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition-all ${
+              className={`py-2 px-1 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
                 type === 'standard'
-                  ? 'bg-slate-800 text-white shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-[#191919] shadow-xs'
+                  : 'text-[#71716E] hover:text-[#191919]'
               }`}
             >
               <Globe className="w-3.5 h-3.5" />
@@ -156,15 +158,15 @@ export default function LinkModal({
               type="button"
               onClick={() => {
                 setType('whatsapp');
-                if (!title) setTitle('Chat on WhatsApp');
+                if (!title) setTitle('Order on WhatsApp');
               }}
-              className={`py-2 px-1 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition-all ${
+              className={`py-2 px-1 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
                 type === 'whatsapp'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#25D366] text-white shadow-xs'
+                  : 'text-[#71716E] hover:text-[#191919]'
               }`}
             >
-              <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <MessageCircle className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
             </button>
 
@@ -172,15 +174,15 @@ export default function LinkModal({
               type="button"
               onClick={() => {
                 setType('phone');
-                if (!title) setTitle('Call Us Directly');
+                if (!title) setTitle('Call Directly');
               }}
-              className={`py-2 px-1 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition-all ${
+              className={`py-2 px-1 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
                 type === 'phone'
-                  ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-sky-600 text-white shadow-xs'
+                  : 'text-[#71716E] hover:text-[#191919]'
               }`}
             >
-              <Phone className="w-3.5 h-3.5 text-sky-400" />
+              <Phone className="w-3.5 h-3.5" />
               <span>Phone</span>
             </button>
 
@@ -190,13 +192,13 @@ export default function LinkModal({
                 setType('email');
                 if (!title) setTitle('Send Email');
               }}
-              className={`py-2 px-1 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition-all ${
+              className={`py-2 px-1 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
                 type === 'email'
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-amber-600 text-white shadow-xs'
+                  : 'text-[#71716E] hover:text-[#191919]'
               }`}
             >
-              <Mail className="w-3.5 h-3.5 text-amber-400" />
+              <Mail className="w-3.5 h-3.5" />
               <span>Email</span>
             </button>
 
@@ -204,15 +206,15 @@ export default function LinkModal({
               type="button"
               onClick={() => {
                 setType('header');
-                if (!title) setTitle('Featured Projects');
+                if (!title) setTitle('Featured Section');
               }}
-              className={`py-2 px-1 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition-all ${
+              className={`py-2 px-1 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
                 type === 'header'
-                  ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#1E2330] text-white shadow-xs'
+                  : 'text-[#71716E] hover:text-[#191919]'
               }`}
             >
-              <Heading className="w-3.5 h-3.5 text-purple-400" />
+              <Heading className="w-3.5 h-3.5" />
               <span>Header</span>
             </button>
           </div>
@@ -221,23 +223,23 @@ export default function LinkModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
-              {type === 'header' ? 'Header Text' : 'Button Label'}
+            <label className="block text-xs font-semibold text-[#191919] mb-1.5">
+              {type === 'header' ? 'Section Header Title' : 'Button Label Text'}
             </label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder={type === 'header' ? 'Section Header' : 'e.g. My Online Store'}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+              placeholder={type === 'header' ? 'e.g. Featured Music' : 'e.g. My Online Store'}
+              className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-sm font-medium"
             />
           </div>
 
           {/* Standard Link */}
           {type === 'standard' && (
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#191919] mb-1.5">
                 Destination URL
               </label>
               <input
@@ -246,19 +248,16 @@ export default function LinkModal({
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com/store"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-sm font-medium"
               />
-              <p className="text-[11px] text-slate-500 mt-1">
-                Must start with http:// or https:// (unsafe schemes are blocked).
-              </p>
             </div>
           )}
 
-          {/* WhatsApp Link */}
+          {/* WhatsApp Link Inputs */}
           {type === 'whatsapp' && (
-            <>
+            <div className="space-y-3 p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-emerald-950 mb-1">
                   WhatsApp Phone Number (with Country Code)
                 </label>
                 <input
@@ -267,29 +266,33 @@ export default function LinkModal({
                   value={whatsappNumber}
                   onChange={(e) => setWhatsappNumber(e.target.value)}
                   placeholder="+2348012345678"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm font-mono"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white border border-emerald-300 focus:border-emerald-600 outline-none text-emerald-950 text-sm font-mono"
                 />
+                <p className="text-[11px] text-emerald-700 mt-1">
+                  Example: 2348012345678 or +2348012345678 (no spaces or dashes)
+                </p>
               </div>
+
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Prefilled WhatsApp Message (optional)
+                <label className="block text-xs font-semibold text-emerald-950 mb-1">
+                  Prefilled Chat Message (Optional)
                 </label>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Hello, I saw your BioNest page and would like to order..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+                  placeholder="Hi! I want to place an order from your BioNest page."
+                  className="w-full px-3.5 py-2 rounded-xl bg-white border border-emerald-300 focus:border-emerald-600 outline-none text-emerald-950 text-xs resize-none"
                 />
               </div>
-            </>
+            </div>
           )}
 
           {/* Phone Link */}
           {type === 'phone' && (
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Phone Number (starts tel: call)
+              <label className="block text-xs font-semibold text-[#191919] mb-1.5">
+                Phone Number to Call
               </label>
               <input
                 type="tel"
@@ -297,7 +300,7 @@ export default function LinkModal({
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="+2348012345678"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm font-mono"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-sm font-mono"
               />
             </div>
           )}
@@ -305,84 +308,73 @@ export default function LinkModal({
           {/* Email Link */}
           {type === 'email' && (
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Email Address (starts mailto:)
+              <label className="block text-xs font-semibold text-[#191919] mb-1.5">
+                Contact Email Address
               </label>
               <input
                 type="email"
                 required
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="contact@business.ng"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+                placeholder="contact@yourdomain.com"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-sm"
               />
             </div>
           )}
 
-          {/* Scheduling Section */}
-          <div className="pt-3 border-t border-slate-800/80">
-            <div className="flex items-center gap-2 mb-3">
-              <Calendar className="w-4 h-4 text-amber-400" />
-              <h4 className="text-xs font-semibold text-slate-200">
-                Link Scheduling (Optional)
-              </h4>
+          {/* Scheduling Section (PRD Requirement) */}
+          <div className="pt-2 border-t border-[#E5E5E3]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#191919] mb-2">
+              <Calendar className="w-3.5 h-3.5 text-[#1E392A]" />
+              <span>Link Scheduling (Optional)</span>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <p className="text-[11px] text-[#71716E] mb-3">
+              Automatically make this link visible during a limited time window (e.g. ticket drop, promo).
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">
+                <label className="block text-[11px] font-semibold text-[#71716E] mb-1">
                   Show From
                 </label>
                 <input
                   type="datetime-local"
                   value={showFrom}
                   onChange={(e) => setShowFrom(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-xs"
+                  className="w-full px-3 py-1.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] text-[#191919] text-xs outline-none"
                 />
               </div>
+
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">
+                <label className="block text-[11px] font-semibold text-[#71716E] mb-1">
                   Show Until
                 </label>
                 <input
                   type="datetime-local"
                   value={showUntil}
                   onChange={(e) => setShowUntil(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-xs"
+                  className="w-full px-3 py-1.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] text-[#191919] text-xs outline-none"
                 />
               </div>
             </div>
-            {(showFrom || showUntil) && (
-              <button
-                type="button"
-                onClick={() => {
-                  setShowFrom('');
-                  setShowUntil('');
-                }}
-                className="text-[11px] text-slate-400 hover:text-rose-400 mt-2 transition-colors"
-              >
-                Clear scheduling
-              </button>
-            )}
           </div>
 
-          <div className="flex gap-2 pt-4">
+          {/* Submit Buttons */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E5E3]">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              className="py-2.5 px-5 rounded-full text-xs font-semibold text-[#71716E] hover:text-[#191919] hover:bg-[#F3F3F1] transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+              className="py-2.5 px-6 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-transform active:scale-95"
             >
-              {saving ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              ) : (
-                <span>{linkToEdit ? 'Save Changes' : 'Add Link'}</span>
-              )}
+              {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+              <span>{linkToEdit ? 'Save Changes' : 'Add Link'}</span>
             </button>
           </div>
         </form>

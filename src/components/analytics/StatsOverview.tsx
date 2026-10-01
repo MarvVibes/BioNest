@@ -19,40 +19,32 @@ export default function StatsOverview({
 
   const cards = [
     {
-      label: 'Total Views',
+      label: 'Total Pageviews',
       value: totalViews.toLocaleString(),
       icon: Eye,
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-500/10',
-      border: 'border-emerald-500/20',
-      subtitle: 'Visits to your public page',
+      iconBg: 'bg-[#F3F3F1] text-[#1E392A]',
+      subtitle: 'Visits to your bio link',
     },
     {
       label: 'Total Clicks',
       value: totalClicks.toLocaleString(),
       icon: MousePointerClick,
-      color: 'text-teal-400',
-      bg: 'bg-teal-500/10',
-      border: 'border-teal-500/20',
-      subtitle: 'Button and link taps',
+      iconBg: 'bg-[#D2E823]/25 text-[#1E392A]',
+      subtitle: 'Taps on your buttons',
     },
     {
-      label: 'Click-Through Rate',
+      label: 'Average CTR',
       value: `${ctr}%`,
       icon: Percent,
-      color: 'text-amber-400',
-      bg: 'bg-amber-500/10',
-      border: 'border-amber-500/20',
-      subtitle: 'Clicks per page visit',
+      iconBg: 'bg-emerald-50 text-emerald-700',
+      subtitle: 'Clicks per page visitor',
     },
     {
       label: 'Unique Visitors',
       value: uniqueVisitors.toLocaleString(),
       icon: Users,
-      color: 'text-sky-400',
-      bg: 'bg-sky-500/10',
-      border: 'border-sky-500/20',
-      subtitle: 'Estimated unique visitors',
+      iconBg: 'bg-blue-50 text-blue-700',
+      subtitle: 'Distinct daily visitors',
     },
   ];
 
@@ -63,22 +55,22 @@ export default function StatsOverview({
         return (
           <div
             key={card.label}
-            className="p-5 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-lg relative overflow-hidden"
+            className="p-6 rounded-[28px] bg-white border border-[#E5E5E3] shadow-xs relative overflow-hidden"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-400">
+              <span className="text-xs font-bold text-[#71716E]">
                 {card.label}
               </span>
               <div
-                className={`w-8 h-8 rounded-xl ${card.bg} ${card.border} border flex items-center justify-center`}
+                className={`w-8 h-8 rounded-xl ${card.iconBg} flex items-center justify-center shadow-xs`}
               >
-                <Icon className={`w-4 h-4 ${card.color}`} />
+                <Icon className="w-4 h-4 stroke-[2.5]" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#191919] tracking-tight">
               {card.value}
             </div>
-            <p className="text-[11px] text-slate-500 mt-1">{card.subtitle}</p>
+            <p className="text-[11px] text-[#8C8C87] mt-1 font-medium">{card.subtitle}</p>
           </div>
         );
       })}

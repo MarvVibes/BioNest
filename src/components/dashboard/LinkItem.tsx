@@ -48,15 +48,15 @@ export default function LinkItem({
   const getTypeIcon = () => {
     switch (link.type) {
       case 'whatsapp':
-        return <MessageCircle className="w-4 h-4 text-emerald-400" />;
+        return <MessageCircle className="w-4 h-4 text-[#25D366]" />;
       case 'phone':
-        return <Phone className="w-4 h-4 text-sky-400" />;
+        return <Phone className="w-4 h-4 text-sky-500" />;
       case 'email':
-        return <Mail className="w-4 h-4 text-amber-400" />;
+        return <Mail className="w-4 h-4 text-amber-500" />;
       case 'header':
-        return <Heading className="w-4 h-4 text-purple-400" />;
+        return <Heading className="w-4 h-4 text-purple-600" />;
       default:
-        return <Globe className="w-4 h-4 text-slate-400" />;
+        return <Globe className="w-4 h-4 text-[#71716E]" />;
     }
   };
 
@@ -66,8 +66,8 @@ export default function LinkItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex items-center justify-between p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all ${
-        !link.is_active ? 'opacity-60 bg-slate-950/40' : ''
+      className={`group flex items-center justify-between p-4 rounded-2xl bg-white border border-[#E5E5E3] hover:border-[#D1D1CE] shadow-xs transition-all ${
+        !link.is_active ? 'opacity-55 bg-[#FAF9F5]' : ''
       }`}
     >
       <div className="flex items-center gap-3.5 min-w-0 flex-1">
@@ -76,37 +76,37 @@ export default function LinkItem({
           type="button"
           {...attributes}
           {...listeners}
-          className="text-slate-600 hover:text-slate-300 cursor-grab active:cursor-grabbing p-1 -ml-1 transition-colors"
+          className="text-[#B5B5B0] hover:text-[#191919] cursor-grab active:cursor-grabbing p-1 -ml-1 transition-colors"
           title="Drag to reorder"
         >
           <GripVertical className="w-4 h-4" />
         </button>
 
         {/* Type Icon Badge */}
-        <div className="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-xl bg-[#F3F3F1] border border-[#E5E5E3] flex items-center justify-center shrink-0">
           {getTypeIcon()}
         </div>
 
         {/* Info */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-white truncate">
+            <h4 className="text-sm font-bold text-[#191919] truncate">
               {link.title}
             </h4>
             {isScheduled && (
               <span
-                className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded-md shrink-0"
+                className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-full shrink-0"
                 title={`Scheduled: ${link.show_from || 'Always'} - ${link.show_until || 'Indefinite'}`}
               >
-                <Calendar className="w-3 h-3" />
+                <Calendar className="w-3 h-3 text-amber-600" />
                 Scheduled
               </span>
             )}
           </div>
 
-          <p className="text-xs text-slate-400 truncate mt-0.5">
+          <p className="text-xs text-[#71716E] truncate mt-0.5">
             {link.type === 'whatsapp'
-              ? `wa.me/${link.whatsapp_number}${link.message ? ` (${link.message})` : ''}`
+              ? `wa.me/${link.whatsapp_number}${link.message ? ` ("${link.message}")` : ''}`
               : link.type === 'phone'
               ? `tel:${link.url}`
               : link.type === 'email'
@@ -128,14 +128,14 @@ export default function LinkItem({
             onChange={(e) => onToggleActive(link.id, e.target.checked)}
             className="sr-only peer"
           />
-          <div className="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+          <div className="w-9 h-5 bg-[#E5E5E3] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-200 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#1E392A]"></div>
         </label>
 
         {/* Edit Button */}
         <button
           type="button"
           onClick={() => onEdit(link)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="p-1.5 rounded-lg text-[#71716E] hover:text-[#191919] hover:bg-[#F3F3F1] transition-colors"
           title="Edit link"
         >
           <Pencil className="w-3.5 h-3.5" />
@@ -145,7 +145,7 @@ export default function LinkItem({
         <button
           type="button"
           onClick={() => onDelete(link.id)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+          className="p-1.5 rounded-lg text-[#71716E] hover:text-rose-600 hover:bg-rose-50 transition-colors"
           title="Delete link"
         >
           <Trash2 className="w-3.5 h-3.5" />

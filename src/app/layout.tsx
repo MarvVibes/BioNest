@@ -61,9 +61,10 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${spaceGrotesk.variable} ${plusJakarta.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#090d16] text-[#f8fafc] selection:bg-emerald-500 selection:text-black">
+      <body className="min-h-full flex flex-col font-sans bg-[#F9F9F8] text-[#191919] selection:bg-[#D2E823] selection:text-black">
         {children}
       </body>
     </html>
   );
 }
+

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Camera, Check, Loader2, Sparkles } from 'lucide-react';
+import { Camera, Check, Loader2, Pencil } from 'lucide-react';
 import { compressAndResizeImage } from '@/lib/image-compression';
 import { createClient } from '@/lib/supabase/client';
 import { ProfileData } from './PhonePreview';
@@ -97,13 +97,13 @@ export default function ProfileHeaderEditor({
   };
 
   return (
-    <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl mb-6">
+    <div className="p-6 rounded-[28px] bg-white border border-[#E5E5E3] shadow-xs mb-6 transition-all">
       <div className="flex items-start gap-4">
         {/* Avatar */}
         <div className="relative group shrink-0">
-          <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-[#F3F3F1] border border-[#E5E5E3] overflow-hidden flex items-center justify-center shadow-xs">
             {uploading ? (
-              <Loader2 className="w-6 h-6 text-emerald-400 animate-spin" />
+              <Loader2 className="w-5 h-5 text-[#1E392A] animate-spin" />
             ) : profile.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -112,13 +112,13 @@ export default function ProfileHeaderEditor({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-xl font-bold text-slate-300">
+              <span className="text-xl font-extrabold text-[#191919]">
                 {profile.display_name?.charAt(0) || profile.username?.charAt(0) || 'B'}
               </span>
             )}
           </div>
-          <label className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
-            <Camera className="w-5 h-5 text-white" />
+          <label className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
+            <Camera className="w-4 h-4 text-white" />
             <input
               type="file"
               accept="image/png,image/jpeg,image/webp"
@@ -133,7 +133,7 @@ export default function ProfileHeaderEditor({
           {isEditing ? (
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                <label className="block text-[11px] font-semibold text-[#71716E] mb-1">
                   Display Name
                 </label>
                 <input
@@ -141,26 +141,26 @@ export default function ProfileHeaderEditor({
                   maxLength={50}
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-xs"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                  Bio (up to 160 chars)
+                <label className="block text-[11px] font-semibold text-[#71716E] mb-1">
+                  Bio (up to 160 characters)
                 </label>
                 <textarea
                   rows={2}
                   maxLength={160}
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-xs resize-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium resize-none"
                 />
               </div>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs"
+                  className="px-3.5 py-1.5 rounded-full bg-[#F3F3F1] hover:bg-[#EAEAE8] text-[#575753] text-xs font-semibold transition-colors"
                 >
                   Cancel
                 </button>
@@ -168,10 +168,10 @@ export default function ProfileHeaderEditor({
                   type="button"
                   disabled={saving}
                   onClick={handleSaveText}
-                  className="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold flex items-center gap-1"
+                  className="px-4 py-1.5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs"
                 >
-                  {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                  <span>Save</span>
+                  {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  <span>Save Profile</span>
                 </button>
               </div>
             </div>
@@ -179,28 +179,29 @@ export default function ProfileHeaderEditor({
             <div>
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-white tracking-tight">
+                  <h3 className="text-base font-bold text-[#191919] tracking-tight">
                     {profile.display_name || profile.username}
                   </h3>
-                  <p className="text-xs font-mono text-emerald-400">
-                    bionest.link/{profile.username}
+                  <p className="text-xs font-mono text-[#71716E]">
+                    bionest.link/<strong className="text-[#1E392A]">{profile.username}</strong>
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="px-3 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+                  className="px-3.5 py-1.5 rounded-full bg-[#F3F3F1] hover:bg-[#EAEAE8] text-[#191919] text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
                 >
-                  Edit Profile
+                  <Pencil className="w-3 h-3" />
+                  <span>Edit</span>
                 </button>
               </div>
               {profile.bio ? (
-                <p className="text-xs text-slate-400 mt-2 leading-relaxed line-clamp-2">
+                <p className="text-xs text-[#575753] mt-2 leading-relaxed line-clamp-2">
                   {profile.bio}
                 </p>
               ) : (
-                <p className="text-xs text-slate-600 italic mt-1.5">
-                  No bio yet. Add one to describe yourself.
+                <p className="text-xs text-[#9E9E99] italic mt-1.5">
+                  No bio yet. Tap Edit to add a headline or short description.
                 </p>
               )}
             </div>

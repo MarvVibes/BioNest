@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Loader2, Calendar, TrendingUp } from 'lucide-react';
+import { Loader2, TrendingUp } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import StatsOverview from '@/components/analytics/StatsOverview';
 import TimeseriesChart, { DailyDataPoint } from '@/components/analytics/TimeseriesChart';
@@ -174,26 +174,25 @@ export default function AnalyticsPage() {
       {/* Header with Range Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-            <TrendingUp className="w-6 h-6 text-emerald-400" />
-            <span>Analytics</span>
+          <h1 className="text-2xl font-extrabold text-[#191919] tracking-tight">
+            Analytics & Insights
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#71716E] mt-1">
             Real visitor views, clicks, and geographic origins (no bot noise or IP tracking)
           </p>
         </div>
 
-        {/* Range Buttons */}
-        <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
+        {/* Range Selector Pill */}
+        <div className="flex items-center gap-1 p-1 rounded-full bg-white border border-[#E5E5E3] shadow-xs self-start sm:self-auto">
           {([7, 30, 90] as const).map((r) => (
             <button
               key={r}
               type="button"
               onClick={() => setDaysRange(r)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 daysRange === r
-                  ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#1E392A] text-white shadow-xs'
+                  : 'text-[#71716E] hover:text-[#191919]'
               }`}
             >
               Last {r} Days
@@ -203,8 +202,8 @@ export default function AnalyticsPage() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-24 text-slate-400">
-          <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+        <div className="flex items-center justify-center py-24 text-[#71716E]">
+          <Loader2 className="w-7 h-7 animate-spin text-[#1E392A]" />
         </div>
       ) : (
         <>

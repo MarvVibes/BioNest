@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { compressAndResizeImage } from '@/lib/image-compression';
@@ -36,7 +37,7 @@ function OnboardingWizard() {
 
   // Step 3: First link
   const [linkType, setLinkType] = useState<'standard' | 'whatsapp'>('whatsapp');
-  const [linkTitle, setLinkTitle] = useState('Chat on WhatsApp');
+  const [linkTitle, setLinkTitle] = useState('Order on WhatsApp');
   const [linkUrl, setLinkUrl] = useState('');
   const [whatsappNumber, setWhatsappNumber] = useState('');
 
@@ -138,39 +139,51 @@ function OnboardingWizard() {
       }
 
       if (linkTitle.trim()) {
-        if (linkType === 'whatsapp' && whatsappNumber.trim()) {
-          await supabase.from('links').insert({
-            profile_id: user.id,
-            type: 'whatsapp',
-            title: linkTitle.trim(),
-            whatsapp_number: whatsappNumber.trim(),
-            position: 0,
-            is_active: true,
-          });
-        } else if (linkType === 'standard' && linkUrl.trim()) {
-          const urlFormatted = linkUrl.startsWith('http') ? linkUrl.trim() : `https://${linkUrl.trim()}`;
-          await supabase.from('links').insert({
-            profile_id: user.id,
-            type: 'standard',
-            title: linkTitle.trim(),
-            url: urlFormatted,
-            position: 0,
-            is_active: true,
-          });
-        }
+        const linkPayload = {
+          profile_id: user.id,
+          type: linkType,
+          title: linkTitle.trim(),
+          url: linkType === 'standard' ? linkUrl.trim() : null,
+          whatsapp_number: linkType === 'whatsapp' ? whatsappNumber.trim() : null,
+          position: 0,
+          is_active: true,
+        };
+
+        await supabase.from('links').insert(linkPayload);
       }
 
       router.push('/dashboard');
     } catch {
-      setErrorMsg('Failed to complete setup. Please check your connection.');
+      setErrorMsg('Failed to complete onboarding. Please try again.');
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="w-full max-w-lg bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10">
+    <div className="w-full max-w-lg bg-white border border-[#E5E5E3] rounded-[36px] p-6 sm:p-10 shadow-sm relative z-10">
+      {/* Progress Dots */}
+      <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E5E5E3]">
+        <div className="flex items-center gap-2">
+          {[1, 2, 3].map((s) => (
+            <div
+              key={s}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                step === s
+                  ? 'w-8 bg-[#1E392A]'
+                  : step > s
+                  ? 'w-4 bg-[#A7D5BE]'
+                  : 'w-2 bg-[#E5E5E3]'
+              }`}
+            />
+          ))}
+        </div>
+        <span className="text-xs font-bold text-[#71716E]">
+          Step {step} of 3
+        </span>
+      </div>
+
       {errorMsg && (
-        <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm">
+        <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs animate-in fade-in">
           {errorMsg}
         </div>
       )}
@@ -179,21 +192,20 @@ function OnboardingWizard() {
       {step === 1 && (
         <div className="space-y-6 animate-in fade-in">
           <div>
-            <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-              Step 1 of 3
-            </span>
-            <h2 className="text-2xl font-bold text-white mt-1">Claim your username</h2>
-            <p className="text-sm text-slate-400 mt-1">
-              This will be your permanent public link that you share everywhere.
+            <h2 className="text-2xl font-extrabold text-[#191919] tracking-tight">
+              Claim your unique bio link
+            </h2>
+            <p className="text-xs text-[#71716E] mt-1 leading-relaxed">
+              This will be your permanent public link that you share in your Instagram bio, TikTok, and business cards.
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-2">
-              Your Link
+            <label className="block text-xs font-bold text-[#191919] mb-2">
+              Your Link URL
             </label>
-            <div className="flex rounded-xl bg-slate-950/80 border border-slate-800 focus-within:border-emerald-500 transition-colors overflow-hidden">
-              <span className="px-3.5 py-3 text-sm text-slate-500 bg-slate-900/60 border-r border-slate-800 flex items-center select-none font-mono">
+            <div className="flex rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus-within:border-[#1E392A] transition-colors overflow-hidden">
+              <span className="px-3.5 py-3 text-sm text-[#71716E] bg-[#F3F3F1] border-r border-[#E5E5E3] flex items-center select-none font-mono">
                 bionest.link/
               </span>
               <input
@@ -202,20 +214,20 @@ function OnboardingWizard() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value.toLowerCase().trim())}
                 placeholder="yourname"
-                className="w-full px-3.5 py-3 bg-transparent text-white text-sm font-mono outline-none placeholder:text-slate-600"
+                className="w-full px-3.5 py-3 bg-transparent text-[#191919] text-sm font-mono font-medium outline-none placeholder:text-[#B5B5B0]"
               />
               <div className="px-3 flex items-center">
                 {usernameStatus === 'checking' && (
-                  <Loader2 className="w-4 h-4 text-slate-400 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-[#71716E] animate-spin" />
                 )}
                 {usernameStatus === 'available' && (
-                  <span className="flex items-center gap-1 text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                    <Check className="w-3.5 h-3.5" />
+                  <span className="flex items-center gap-1 text-xs text-emerald-800 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                     Available
                   </span>
                 )}
                 {usernameStatus === 'unavailable' && (
-                  <span className="flex items-center gap-1 text-xs text-rose-400 font-semibold bg-rose-500/10 px-2 py-0.5 rounded-full">
+                  <span className="flex items-center gap-1 text-xs text-rose-800 font-bold bg-rose-100 px-2.5 py-0.5 rounded-full">
                     <X className="w-3.5 h-3.5" />
                     Taken
                   </span>
@@ -224,9 +236,9 @@ function OnboardingWizard() {
             </div>
 
             {usernameStatus === 'unavailable' && (
-              <p className="text-xs text-rose-400 mt-2">{usernameReason}</p>
+              <p className="text-xs text-rose-600 mt-2 font-medium">{usernameReason}</p>
             )}
-            <p className="text-[11px] text-slate-500 mt-2">
+            <p className="text-[11px] text-[#8C8C87] mt-2">
               Use 3-30 lowercase characters, numbers, underscores, or hyphens.
             </p>
           </div>
@@ -235,10 +247,10 @@ function OnboardingWizard() {
             type="button"
             disabled={usernameStatus !== 'available'}
             onClick={() => setStep(2)}
-            className="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-40 transition-all duration-200"
+            className="w-full py-3.5 px-5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs disabled:opacity-40 transition-transform active:scale-95"
           >
             <span>Continue</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
       )}
@@ -247,19 +259,18 @@ function OnboardingWizard() {
       {step === 2 && (
         <div className="space-y-6 animate-in fade-in">
           <div>
-            <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-              Step 2 of 3
-            </span>
-            <h2 className="text-2xl font-bold text-white mt-1">Setup your profile</h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Tell people who you are and what you do.
+            <h2 className="text-2xl font-extrabold text-[#191919] tracking-tight">
+              Set up your profile
+            </h2>
+            <p className="text-xs text-[#71716E] mt-1 leading-relaxed">
+              Tell your fans and clients who you are and what you do.
             </p>
           </div>
 
           {/* Avatar upload */}
           <div className="flex items-center gap-5">
             <div className="relative group shrink-0">
-              <div className="w-20 h-20 rounded-2xl bg-slate-800 border-2 border-dashed border-slate-700 overflow-hidden flex items-center justify-center group-hover:border-emerald-500 transition-colors">
+              <div className="w-20 h-20 rounded-full bg-[#F3F3F1] border-2 border-dashed border-[#D8D8D5] overflow-hidden flex items-center justify-center group-hover:border-[#1E392A] transition-colors shadow-xs">
                 {avatarPreview ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -268,7 +279,7 @@ function OnboardingWizard() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <Camera className="w-7 h-7 text-slate-500 group-hover:text-emerald-400 transition-colors" />
+                  <Camera className="w-6 h-6 text-[#8C8C87] group-hover:text-[#1E392A] transition-colors" />
                 )}
               </div>
               <label className="absolute inset-0 cursor-pointer">
@@ -281,15 +292,15 @@ function OnboardingWizard() {
               </label>
             </div>
             <div className="space-y-1">
-              <p className="text-xs font-semibold text-slate-200">Profile Photo</p>
-              <p className="text-[11px] text-slate-400">
-                JPG, PNG or WebP under 2 MB. Automatically cropped and optimized.
+              <p className="text-xs font-bold text-[#191919]">Profile Photo</p>
+              <p className="text-[11px] text-[#71716E]">
+                JPG, PNG or WebP under 2 MB. Automatically cropped.
               </p>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-[#191919] mb-1.5">
               Display Name
             </label>
             <input
@@ -297,25 +308,25 @@ function OnboardingWizard() {
               maxLength={50}
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Adaeze Okafor"
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm placeholder:text-slate-600"
+              placeholder="e.g. Adaeze Okafor"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium placeholder:text-[#B5B5B0]"
             />
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-xs font-medium text-slate-300">
+              <label className="block text-xs font-bold text-[#191919]">
                 Bio (up to 160 characters)
               </label>
-              <span className="text-[11px] text-slate-500">{bio.length}/160</span>
+              <span className="text-[11px] text-[#8C8C87]">{bio.length}/160</span>
             </div>
             <textarea
               rows={3}
               maxLength={160}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="Afrobeats artist & producer in Lagos. New single out now!"
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm placeholder:text-slate-600 resize-none"
+              placeholder="Afrobeats singer-songwriter based in Lagos. New single out now!"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium placeholder:text-[#B5B5B0] resize-none"
             />
           </div>
 
@@ -323,17 +334,17 @@ function OnboardingWizard() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors"
+              className="py-3 px-6 rounded-full bg-[#F3F3F1] hover:bg-[#EAEAE8] text-[#71716E] text-xs font-semibold transition-colors"
             >
               Back
             </button>
             <button
               type="button"
               onClick={() => setStep(3)}
-              className="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all duration-200"
+              className="flex-1 py-3 px-5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95"
             >
               <span>Next: Add First Link</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
           </div>
         </div>
@@ -343,12 +354,11 @@ function OnboardingWizard() {
       {step === 3 && (
         <div className="space-y-6 animate-in fade-in">
           <div>
-            <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-              Step 3 of 3
-            </span>
-            <h2 className="text-2xl font-bold text-white mt-1">Add your first link</h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Start with your WhatsApp contact or your primary website.
+            <h2 className="text-2xl font-extrabold text-[#191919] tracking-tight">
+              Add your first link
+            </h2>
+            <p className="text-xs text-[#71716E] mt-1 leading-relaxed">
+              Start with your WhatsApp contact or your primary online website.
             </p>
           </div>
 
@@ -357,16 +367,16 @@ function OnboardingWizard() {
               type="button"
               onClick={() => {
                 setLinkType('whatsapp');
-                setLinkTitle('Chat on WhatsApp');
+                setLinkTitle('Order on WhatsApp');
               }}
-              className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 transition-all ${
+              className={`p-3.5 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
                 linkType === 'whatsapp'
-                  ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                  : 'border-slate-800 bg-slate-950/40 text-slate-400 hover:border-slate-700'
+                  ? 'border-[#25D366] bg-emerald-50 text-emerald-950 font-bold shadow-xs'
+                  : 'border-[#E5E5E3] bg-[#FAF9F5] text-[#71716E] hover:border-[#B5B5B0]'
               }`}
             >
-              <MessageCircle className="w-5 h-5" />
-              <span className="text-xs font-semibold">WhatsApp Button</span>
+              <MessageCircle className="w-5 h-5 text-[#25D366]" />
+              <span className="text-xs">WhatsApp Button</span>
             </button>
             <button
               type="button"
@@ -374,19 +384,19 @@ function OnboardingWizard() {
                 setLinkType('standard');
                 setLinkTitle('My Website');
               }}
-              className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 transition-all ${
+              className={`p-3.5 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
                 linkType === 'standard'
-                  ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                  : 'border-slate-800 bg-slate-950/40 text-slate-400 hover:border-slate-700'
+                  ? 'border-[#1E392A] bg-[#1E392A]/5 text-[#1E392A] font-bold shadow-xs'
+                  : 'border-[#E5E5E3] bg-[#FAF9F5] text-[#71716E] hover:border-[#B5B5B0]'
               }`}
             >
-              <Globe className="w-5 h-5" />
-              <span className="text-xs font-semibold">Web Link</span>
+              <Globe className="w-5 h-5 text-[#71716E]" />
+              <span className="text-xs">Web Link</span>
             </button>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-[#191919] mb-1.5">
               Button Label
             </label>
             <input
@@ -394,26 +404,26 @@ function OnboardingWizard() {
               value={linkTitle}
               onChange={(e) => setLinkTitle(e.target.value)}
               placeholder="e.g. Chat on WhatsApp"
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium"
             />
           </div>
 
           {linkType === 'whatsapp' ? (
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                WhatsApp Number (with country code)
+              <label className="block text-xs font-bold text-[#191919] mb-1.5">
+                WhatsApp Phone Number (with country code)
               </label>
               <input
                 type="tel"
                 value={whatsappNumber}
                 onChange={(e) => setWhatsappNumber(e.target.value)}
                 placeholder="+2348012345678"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-mono font-medium"
               />
             </div>
           ) : (
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#191919] mb-1.5">
                 Destination URL
               </label>
               <div className="relative">
@@ -422,9 +432,9 @@ function OnboardingWizard() {
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   placeholder="https://example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 outline-none text-slate-200 text-sm"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium"
                 />
-                <LinkIcon className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <LinkIcon className="w-4 h-4 text-[#8C8C87] absolute left-3.5 top-1/2 -translate-y-1/2" />
               </div>
             </div>
           )}
@@ -433,7 +443,7 @@ function OnboardingWizard() {
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors"
+              className="py-3 px-6 rounded-full bg-[#F3F3F1] hover:bg-[#EAEAE8] text-[#71716E] text-xs font-semibold transition-colors"
             >
               Back
             </button>
@@ -441,7 +451,7 @@ function OnboardingWizard() {
               type="button"
               disabled={submitting}
               onClick={handleFinishOnboarding}
-              className="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all duration-200 disabled:opacity-50"
+              className="flex-1 py-3 px-5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95 disabled:opacity-50"
             >
               {submitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -461,21 +471,19 @@ function OnboardingWizard() {
 
 export default function OnboardingPage() {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden bg-[#090d16]">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-emerald-600/10 rounded-full blur-[140px] pointer-events-none" />
-
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden bg-[#F3F3F1]">
       <div className="mb-6 text-center relative z-10 w-full max-w-lg">
-        <div className="inline-flex items-center gap-2 mb-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/25">
-            <Sparkles className="w-4 h-4 text-black stroke-[2.5]" />
+        <Link href="/" className="inline-flex items-center gap-2.5 mb-2 group">
+          <div className="w-9 h-9 rounded-xl bg-[#1E392A] flex items-center justify-center text-[#D2E823] font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+            B
           </div>
-          <span className="text-xl font-bold tracking-tight text-white font-jakarta">
+          <span className="text-xl font-extrabold tracking-tight text-[#191919]">
             BioNest
           </span>
-        </div>
+        </Link>
       </div>
 
-      <Suspense fallback={<Loader2 className="w-8 h-8 animate-spin text-emerald-500" />}>
+      <Suspense fallback={<Loader2 className="w-8 h-8 animate-spin text-[#1E392A]" />}>
         <OnboardingWizard />
       </Suspense>
     </div>

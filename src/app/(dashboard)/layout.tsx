@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  Sparkles,
   Link as LinkIcon,
   Palette,
   BarChart3,
@@ -41,7 +40,7 @@ export default function DashboardLayout({
         } = await supabase.auth.getUser();
 
         if (!user) {
-          // In development without real supabase auth, set a local fallback profile so developer can test UI
+          // Dev fallback
           setProfile({
             id: 'dev-user-id',
             username: 'adaeze',
@@ -95,23 +94,23 @@ export default function DashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#F9F9F8] text-[#191919] flex flex-col font-sans">
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-3.5">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-[#E5E5E3] px-4 sm:px-8 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-8">
             {/* Brand */}
             <Link href="/dashboard" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
-                <Sparkles className="w-4 h-4 text-black stroke-[2.5]" />
+              <div className="w-8 h-8 rounded-xl bg-[#1E392A] flex items-center justify-center text-[#D2E823] font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                B
               </div>
-              <span className="text-lg font-bold tracking-tight text-white font-jakarta">
+              <span className="text-lg font-extrabold tracking-tight text-[#191919]">
                 BioNest
               </span>
             </Link>
 
             {/* Navigation Tabs (Desktop) */}
-            <nav className="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-2xl border border-slate-800">
+            <nav className="hidden md:flex items-center gap-1 bg-[#F3F3F1] p-1 rounded-full border border-[#E5E5E3]">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -119,10 +118,10 @@ export default function DashboardLayout({
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
                       isActive
-                        ? 'bg-slate-800 text-white shadow-sm'
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-[#1E2330] text-white shadow-xs'
+                        : 'text-[#656560] hover:text-[#191919] hover:bg-black/5'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -133,25 +132,25 @@ export default function DashboardLayout({
             </nav>
           </div>
 
-          {/* Right Header: Link Share & User */}
-          <div className="flex items-center gap-3">
+          {/* Right Header: Link Pill & Share */}
+          <div className="flex items-center gap-2.5">
             {profile && (
-              <div className="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs">
-                <span className="text-slate-400 font-mono">
-                  bionest.link/<strong className="text-slate-200">{profile.username}</strong>
+              <div className="hidden sm:flex items-center gap-2 bg-[#F3F3F1] border border-[#E5E5E3] px-3.5 py-1.5 rounded-full text-xs">
+                <span className="text-[#71716E] font-mono">
+                  bionest.link/<strong className="text-[#191919] font-bold">{profile.username}</strong>
                 </span>
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="text-slate-400 hover:text-emerald-400 p-1 transition-colors"
+                  className="text-[#71716E] hover:text-[#191919] p-1 transition-colors"
                   title="Copy link"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? <Check className="w-3.5 h-3.5 text-[#1E392A] stroke-[3]" /> : <Copy className="w-3.5 h-3.5" />}
                 </button>
                 <Link
                   href={`/${profile.username}`}
                   target="_blank"
-                  className="text-slate-400 hover:text-white p-1 transition-colors"
+                  className="text-[#71716E] hover:text-[#191919] p-1 transition-colors"
                   title="Open live page"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -163,7 +162,7 @@ export default function DashboardLayout({
             <button
               type="button"
               onClick={() => setShowQR(true)}
-              className="py-1.5 px-3.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+              className="py-1.5 px-4 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95"
             >
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
@@ -173,7 +172,7 @@ export default function DashboardLayout({
             <button
               type="button"
               onClick={handleSignOut}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-full text-[#71716E] hover:text-[#191919] hover:bg-[#EAEAE8] transition-colors"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
@@ -182,7 +181,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Mobile Navigation bar */}
-        <div className="flex md:hidden items-center justify-between gap-1 mt-3 pt-2 border-t border-slate-800/60 overflow-x-auto">
+        <div className="flex md:hidden items-center justify-between gap-1 mt-2.5 pt-2 border-t border-[#E5E5E3] overflow-x-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -190,10 +189,10 @@ export default function DashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium shrink-0 transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all ${
                   isActive
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold'
-                    : 'text-slate-400'
+                    ? 'bg-[#1E2330] text-white font-semibold shadow-xs'
+                    : 'text-[#656560]'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />

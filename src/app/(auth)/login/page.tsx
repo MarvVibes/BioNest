@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import {
-  Sparkles,
   ArrowRight,
   Eye,
   EyeOff,
@@ -86,10 +85,10 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10">
+    <div className="w-full max-w-md bg-white border border-[#E5E5E3] rounded-[32px] p-6 sm:p-8 shadow-sm relative z-10">
       {errorMessage && (
-        <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3 text-rose-300 text-sm animate-in fade-in">
-          <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-start gap-3 text-rose-700 text-xs animate-in fade-in">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
           <p>{errorMessage}</p>
         </div>
       )}
@@ -99,10 +98,10 @@ function LoginForm() {
         type="button"
         onClick={handleGoogleLogin}
         disabled={googleLoading || loading}
-        className="w-full py-3 px-4 rounded-xl border border-slate-700 hover:border-slate-600 bg-slate-800/60 hover:bg-slate-800 text-slate-200 font-medium text-sm flex items-center justify-center gap-3 transition-all duration-200 disabled:opacity-50"
+        className="w-full py-3 px-4 rounded-full border border-[#D8D8D5] hover:bg-[#FAF9F5] text-[#191919] font-semibold text-xs flex items-center justify-center gap-3 transition-colors disabled:opacity-50 shadow-xs"
       >
         {googleLoading ? (
-          <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
+          <Loader2 className="w-4 h-4 animate-spin text-[#71716E]" />
         ) : (
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path
@@ -127,15 +126,15 @@ function LoginForm() {
       </button>
 
       <div className="relative my-6 flex items-center justify-center">
-        <div className="border-t border-slate-800 w-full" />
-        <span className="bg-slate-900 px-3 text-xs text-slate-500 uppercase tracking-wider absolute">
+        <div className="border-t border-[#E5E5E3] w-full" />
+        <span className="bg-white px-3 text-[11px] font-semibold text-[#8C8C87] uppercase tracking-wider absolute">
           or with email
         </span>
       </div>
 
       <form onSubmit={handleEmailLogin} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1.5">
+          <label className="block text-xs font-bold text-[#191919] mb-1.5">
             Email Address
           </label>
           <input
@@ -143,19 +142,19 @@ function LoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-slate-200 text-sm placeholder:text-slate-600 transition-colors"
+            placeholder="you@domain.com"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium placeholder:text-[#B5B5B0] transition-colors"
           />
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-medium text-slate-300">
+            <label className="block text-xs font-bold text-[#191919]">
               Password
             </label>
             <Link
               href="/reset-password"
-              className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+              className="text-[11px] text-[#71716E] hover:text-[#191919] transition-colors"
             >
               Forgot password?
             </Link>
@@ -167,12 +166,12 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-slate-200 text-sm placeholder:text-slate-600 transition-colors pr-10"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] focus:border-[#1E392A] outline-none text-[#191919] text-xs font-medium placeholder:text-[#B5B5B0] transition-colors pr-10"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8C87] hover:text-[#191919] transition-colors"
               tabIndex={-1}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -183,24 +182,24 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading || googleLoading}
-          className="w-full mt-2 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-200 disabled:opacity-50"
+          className="w-full mt-2 py-3 px-4 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95 disabled:opacity-50"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>Log In</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Log in</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </>
           )}
         </button>
       </form>
 
-      <div className="mt-6 text-center text-xs text-slate-400">
+      <div className="mt-6 text-center text-xs text-[#71716E]">
         Don&apos;t have an account?{' '}
         <Link
           href="/signup"
-          className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+          className="text-[#1E392A] hover:underline font-bold transition-colors"
         >
           Create your free page
         </Link>
@@ -211,24 +210,21 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden bg-[#090d16]">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-[90px] pointer-events-none" />
-
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden bg-[#F3F3F1]">
       <div className="mb-8 text-center relative z-10">
-        <Link href="/" className="inline-flex items-center gap-2 mb-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-5 h-5 text-black stroke-[2.5]" />
+        <Link href="/" className="inline-flex items-center gap-2.5 mb-3 group">
+          <div className="w-9 h-9 rounded-xl bg-[#1E392A] flex items-center justify-center text-[#D2E823] font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+            B
           </div>
-          <span className="text-2xl font-bold tracking-tight text-white font-jakarta">
+          <span className="text-2xl font-extrabold tracking-tight text-[#191919]">
             BioNest
           </span>
         </Link>
-        <h1 className="text-xl font-semibold text-slate-200">Welcome back</h1>
-        <p className="text-sm text-slate-400 mt-1">Log in to manage your link-in-bio page</p>
+        <h1 className="text-xl font-bold text-[#191919]">Welcome back</h1>
+        <p className="text-xs text-[#71716E] mt-1">Log in to manage your link-in-bio page</p>
       </div>
 
-      <Suspense fallback={<Loader2 className="w-8 h-8 animate-spin text-emerald-500" />}>
+      <Suspense fallback={<Loader2 className="w-8 h-8 animate-spin text-[#1E392A]" />}>
         <LoginForm />
       </Suspense>
     </div>

@@ -18,14 +18,11 @@ import {
 } from '@dnd-kit/sortable';
 import {
   Plus,
-  Share2,
   Eye,
   EyeOff,
-  Sparkles,
   LinkIcon,
-  MessageCircle,
   Loader2,
-  Share,
+  Share2,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import ProfileHeaderEditor from '@/components/dashboard/ProfileHeaderEditor';
@@ -154,77 +151,26 @@ export default function DashboardLinksPage() {
     }
   };
 
-  // Toggle link active
+  // Toggle Link Active State
   const handleToggleActive = async (id: string, active: boolean) => {
     setLinks((prev) =>
       prev.map((l) => (l.id === id ? { ...l, is_active: active } : l))
     );
+
     try {
-      await supabase.from('links').update({ is_active: active }).eq('id', id);
+      await supabase
+        .from('links')
+        .update({ is_active: active })
+        .eq('id', id);
     } catch (err) {
       console.error('Failed to toggle link active state:', err);
     }
   };
 
-  // Save Link (Add or Edit)
-  const handleSaveLink = async (linkData: Partial<BioLink>) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) return;
-
-    if (linkData.id) {
-      // Edit
-      const { error } = await supabase
-        .from('links')
-        .update({
-          type: linkData.type,
-          title: linkData.title,
-          url: linkData.url,
-          whatsapp_number: linkData.whatsapp_number,
-          message: linkData.message,
-          show_from: linkData.show_from,
-          show_until: linkData.show_until,
-        })
-        .eq('id', linkData.id);
-
-      if (!error) {
-        setLinks((prev) =>
-          prev.map((l) => (l.id === linkData.id ? ({ ...l, ...linkData } as BioLink) : l))
-        );
-      }
-    } else {
-      // Create
-      const newPos = links.length;
-      const { data, error } = await supabase
-        .from('links')
-        .insert({
-          profile_id: user.id,
-          type: linkData.type,
-          title: linkData.title,
-          url: linkData.url,
-          whatsapp_number: linkData.whatsapp_number,
-          message: linkData.message,
-          position: newPos,
-          is_active: true,
-          show_from: linkData.show_from,
-          show_until: linkData.show_until,
-        })
-        .select()
-        .single();
-
-      if (!error && data) {
-        setLinks((prev) => [...prev, data]);
-      }
-    }
-  };
-
   // Delete Link
   const handleDeleteLink = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this link?')) return;
-
     setLinks((prev) => prev.filter((l) => l.id !== id));
+
     try {
       await supabase.from('links').delete().eq('id', id);
     } catch (err) {
@@ -232,18 +178,81 @@ export default function DashboardLinksPage() {
     }
   };
 
+  // Save Link (Create or Edit)
+  const handleSaveLink = async (payload: Partial<BioLink>) => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      if (payload.id) {
+        // Update existing link
+        const { data: updated } = await supabase
+          .from('links')
+          .update({
+            type: payload.type,
+            title: payload.title,
+            url: payload.url,
+            whatsapp_number: payload.whatsapp_number,
+            message: payload.message,
+            show_from: payload.show_from,
+            show_until: payload.show_until,
+            is_active: payload.is_active,
+          })
+          .eq('id', payload.id)
+          .select()
+          .maybeSingle();
+
+        if (updated) {
+          setLinks((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+        }
+      } else {
+        // Insert new link
+        const { data: inserted } = await supabase
+          .from('links')
+          .insert({
+            profile_id: user.id,
+            type: payload.type || 'standard',
+            title: payload.title || 'Untitled',
+            url: payload.url || null,
+            whatsapp_number: payload.whatsapp_number || null,
+            message: payload.message || null,
+            show_from: payload.show_from || null,
+            show_until: payload.show_until || null,
+            position: links.length,
+            is_active: true,
+          })
+          .select()
+          .maybeSingle();
+
+        if (inserted) {
+          setLinks((prev) => [...prev, inserted]);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to save link:', err);
+    } finally {
+      setIsLinkModalOpen(false);
+      setEditingLink(null);
+    }
+  };
+
+
   // Save Social Links
   const handleSaveSocialLinks = async (updatedSocials: SocialLinkItem[]) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) return;
-
     setSocialLinks(updatedSocials);
+    setIsSocialModalOpen(false);
 
     try {
-      // Delete existing and insert fresh list
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      // Delete old and re-insert
       await supabase.from('social_links').delete().eq('profile_id', user.id);
 
       if (updatedSocials.length > 0) {
@@ -262,8 +271,8 @@ export default function DashboardLinksPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24 text-slate-400">
-        <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+      <div className="flex items-center justify-center py-24 text-[#71716E]">
+        <Loader2 className="w-7 h-7 animate-spin text-[#1E392A]" />
       </div>
     );
   }
@@ -272,13 +281,13 @@ export default function DashboardLinksPage() {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       {/* LEFT COLUMN: Links Editor (lg:col-span-7) */}
       <div className="lg:col-span-7 space-y-6">
-        {/* Profile Card */}
+        {/* Profile Header Summary */}
         <ProfileHeaderEditor
           profile={profile}
           onUpdate={(updated) => setProfile((p) => ({ ...p, ...updated }))}
         />
 
-        {/* Action Header */}
+        {/* Primary Action Buttons */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <button
             type="button"
@@ -286,42 +295,44 @@ export default function DashboardLinksPage() {
               setEditingLink(null);
               setIsLinkModalOpen(true);
             }}
-            className="flex-1 py-3 px-5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-200"
+            className="flex-1 py-3.5 px-6 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-[0.99]"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
-            <span>Add Link or Button</span>
+            <span>Add link or button</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsSocialModalOpen(true)}
-            className="py-3 px-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-2 transition-colors"
+            className="py-3.5 px-5 rounded-full bg-white border border-[#E5E5E3] hover:bg-[#F3F3F1] text-[#191919] font-semibold text-xs flex items-center gap-2 transition-colors shadow-xs"
           >
-            <Share className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Social Icons ({socialLinks.length})</span>
+            <Share2 className="w-3.5 h-3.5 text-[#1E392A]" />
+            <span>Social icons ({socialLinks.length})</span>
           </button>
         </div>
 
         {/* Links Sortable List */}
         <div className="space-y-3">
           {links.length === 0 ? (
-            <div className="p-12 text-center rounded-3xl bg-slate-900/40 border border-dashed border-slate-800 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-slate-800/80 text-slate-400 flex items-center justify-center mx-auto">
-                <LinkIcon className="w-6 h-6" />
+            <div className="p-12 text-center rounded-[32px] bg-white border border-dashed border-[#D8D8D5] space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#F3F3F1] text-[#71716E] flex items-center justify-center mx-auto shadow-xs">
+                <LinkIcon className="w-6 h-6 stroke-[2]" />
               </div>
-              <h4 className="text-base font-bold text-white">You have no links yet</h4>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Add your WhatsApp contact, shop, music, social channels, or portfolio to share with your visitors.
-              </p>
+              <div className="space-y-1">
+                <h4 className="text-base font-bold text-[#191919]">No links yet</h4>
+                <p className="text-xs text-[#71716E] max-w-sm mx-auto leading-relaxed">
+                  Add your WhatsApp contact, music, lookbook, social channels, or booking links to share with your audience.
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => {
                   setEditingLink(null);
                   setIsLinkModalOpen(true);
                 }}
-                className="mt-2 py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
+                className="mt-2 py-2.5 px-5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Create your first link</span>
               </button>
             </div>
@@ -336,6 +347,7 @@ export default function DashboardLinksPage() {
                 strategy={verticalListSortingStrategy}
               >
                 <div className="space-y-3">
+
                   {links.map((link) => (
                     <LinkItem
                       key={link.id}
@@ -358,7 +370,7 @@ export default function DashboardLinksPage() {
       {/* RIGHT COLUMN: Live Phone Preview (lg:col-span-5) */}
       <div className="hidden lg:block lg:col-span-5 sticky top-20">
         <div className="text-center mb-2">
-          <span className="text-[11px] font-semibold tracking-wider uppercase text-slate-400">
+          <span className="text-[11px] font-bold tracking-wider uppercase text-[#71716E]">
             Live Preview
           </span>
         </div>
@@ -375,7 +387,7 @@ export default function DashboardLinksPage() {
         <button
           type="button"
           onClick={() => setShowMobilePreview(!showMobilePreview)}
-          className="py-3 px-5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-2xl shadow-emerald-500/50 transition-all"
+          className="py-3 px-5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center gap-2 shadow-xl transition-all"
         >
           {showMobilePreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           <span>{showMobilePreview ? 'Close Preview' : 'Phone Preview'}</span>
@@ -384,11 +396,11 @@ export default function DashboardLinksPage() {
 
       {/* Mobile Preview Modal */}
       {showMobilePreview && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-black/90 p-4 flex flex-col items-center justify-center animate-in fade-in">
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 flex flex-col items-center justify-center animate-in fade-in">
           <button
             type="button"
             onClick={() => setShowMobilePreview(false)}
-            className="mb-4 py-2 px-4 rounded-xl bg-slate-800 text-slate-200 text-xs font-semibold"
+            className="mb-4 py-2 px-5 rounded-full bg-white text-[#191919] text-xs font-bold shadow-md"
           >
             Back to Editor
           </button>

@@ -54,16 +54,16 @@ export default function ReportModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in">
-      <div className="relative w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl text-slate-100">
-        <div className="flex items-center justify-between mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <div className="relative w-full max-w-sm bg-white border border-[#E5E5E3] rounded-[32px] p-6 shadow-2xl text-[#191919]">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#E5E5E3]">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
-            <h3 className="text-sm font-bold">Report @{username}</h3>
+            <AlertTriangle className="w-4 h-4 text-amber-600" />
+            <h3 className="text-sm font-bold text-[#191919]">Report @{username}</h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="p-1.5 rounded-full text-[#71716E] hover:text-[#191919] hover:bg-[#F3F3F1] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -71,17 +71,17 @@ export default function ReportModal({
 
         {success ? (
           <div className="text-center py-6 space-y-3">
-            <div className="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 bg-emerald-50 text-[#1E392A] rounded-full flex items-center justify-center mx-auto border border-emerald-200 shadow-xs">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h4 className="text-base font-bold text-white">Thank you</h4>
-            <p className="text-xs text-slate-400">
+            <h4 className="text-base font-bold text-[#191919]">Report Received</h4>
+            <p className="text-xs text-[#71716E] leading-relaxed">
               Your report has been submitted for review. We take safety and trust very seriously.
             </p>
             <button
               type="button"
               onClick={onClose}
-              className="mt-2 py-2 px-5 rounded-xl bg-slate-800 text-xs font-semibold text-white"
+              className="mt-2 py-2 px-6 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-xs font-bold text-white shadow-xs"
             >
               Close
             </button>
@@ -89,19 +89,19 @@ export default function ReportModal({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {errorMsg && (
-              <p className="p-3 rounded-xl bg-rose-500/10 text-rose-300 text-xs border border-rose-500/30">
+              <p className="p-3 rounded-xl bg-rose-50 text-rose-700 text-xs border border-rose-200">
                 {errorMsg}
               </p>
             )}
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#191919] mb-1.5">
                 Reason for report
               </label>
               <select
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] text-xs font-medium text-[#191919] outline-none"
               >
                 <option value="spam_or_phishing">Spam or Phishing</option>
                 <option value="scam_or_fraud">Scam, Fraud or Deceptive</option>
@@ -112,7 +112,7 @@ export default function ReportModal({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#191919] mb-1.5">
                 Details (optional)
               </label>
               <textarea
@@ -121,24 +121,25 @@ export default function ReportModal({
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 placeholder="Please describe why this page violates policies..."
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 outline-none resize-none"
+                className="w-full px-3 py-2 rounded-xl bg-[#FAF9F5] border border-[#D8D8D5] text-xs text-[#191919] outline-none resize-none font-medium placeholder:text-[#B5B5B0]"
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2.5 pt-1">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-medium"
+                className="flex-1 py-2.5 rounded-full bg-[#F3F3F1] hover:bg-[#EAEAE8] text-[#71716E] text-xs font-semibold"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5"
+                className="flex-1 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs"
               >
-                {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Submit Report'}
+                {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>Submit Report</span>
               </button>
             </div>
           </form>

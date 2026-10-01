@@ -76,16 +76,16 @@ export default function SocialLinksModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-      <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl">
-        <div className="flex items-center justify-between mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+      <div className="relative w-full max-w-md bg-white border border-[#E5E5E3] rounded-[32px] p-6 sm:p-8 shadow-2xl">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#E5E5E3]">
           <div>
-            <h3 className="text-base font-semibold text-white">Social Icons</h3>
-            <p className="text-xs text-slate-400">Display icon buttons under your bio</p>
+            <h3 className="text-base font-bold text-[#191919]">Social Icons</h3>
+            <p className="text-xs text-[#71716E]">Display icon badges directly under your bio</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-full text-[#71716E] hover:text-[#191919] hover:bg-[#F3F3F1] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -94,30 +94,30 @@ export default function SocialLinksModal({
         {/* Existing active social links */}
         <div className="space-y-2 mb-6 max-h-48 overflow-y-auto pr-1">
           {links.length === 0 ? (
-            <p className="text-xs text-slate-500 text-center py-4">
+            <p className="text-xs text-[#9E9E99] text-center py-4">
               No social icons added yet. Select a platform below.
             </p>
           ) : (
             links.map((link) => (
               <div
                 key={link.platform}
-                className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs"
+                className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#E5E5E3] text-xs"
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <div className="w-5 h-5 flex items-center justify-center text-slate-300 shrink-0">
+                  <div className="w-5 h-5 flex items-center justify-center text-[#191919] shrink-0">
                     <SocialIcon platform={link.platform} size={15} />
                   </div>
-                  <span className="font-medium text-slate-200 capitalize">
+                  <span className="font-semibold text-[#191919] capitalize">
                     {link.platform}
                   </span>
-                  <span className="text-slate-500 truncate max-w-[180px]">
+                  <span className="text-[#71716E] truncate max-w-[170px]">
                     {link.url}
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => handleRemove(link.platform)}
-                  className="text-slate-500 hover:text-rose-400 transition-colors ml-2"
+                  className="text-[#9E9E99] hover:text-rose-600 transition-colors ml-2"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -127,8 +127,8 @@ export default function SocialLinksModal({
         </div>
 
         {/* Add new social platform */}
-        <div className="p-3.5 rounded-2xl bg-slate-950/40 border border-slate-800/80 space-y-3">
-          <label className="block text-xs font-medium text-slate-300">
+        <div className="p-4 rounded-2xl bg-[#F3F3F1] border border-[#E5E5E3] space-y-3">
+          <label className="block text-xs font-bold text-[#191919]">
             Add or Update Platform
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -136,7 +136,7 @@ export default function SocialLinksModal({
               <select
                 value={selectedPlatform}
                 onChange={(e) => setSelectedPlatform(e.target.value as SocialPlatform)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-200 outline-none capitalize"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-[#D8D8D5] text-xs font-semibold text-[#191919] outline-none capitalize"
               >
                 {socialPlatformList.map((p) => (
                   <option key={p} value={p}>
@@ -151,26 +151,26 @@ export default function SocialLinksModal({
                 value={inputHandle}
                 onChange={(e) => setInputHandle(e.target.value)}
                 placeholder="handle or link"
-                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-200 outline-none placeholder:text-slate-500"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-[#D8D8D5] text-xs text-[#191919] outline-none placeholder:text-[#B5B5B0]"
               />
             </div>
           </div>
           <button
             type="button"
             onClick={handleAddPlatform}
-            className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full py-2 px-3 rounded-full bg-white border border-[#D8D8D5] hover:bg-[#FAF9F5] text-[#191919] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Add Icon</span>
+            <span>Add to profile</span>
           </button>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 mt-6">
+        <div className="flex gap-2.5 mt-6 pt-3 border-t border-[#E5E5E3]">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+            className="flex-1 py-2.5 rounded-full bg-[#F3F3F1] hover:bg-[#EAEAE8] text-[#71716E] text-xs font-semibold transition-colors"
           >
             Cancel
           </button>
@@ -178,7 +178,7 @@ export default function SocialLinksModal({
             type="button"
             disabled={saving}
             onClick={handleSaveAndClose}
-            className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+            className="flex-1 py-2.5 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-transform active:scale-95 disabled:opacity-50"
           >
             {saving ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Palette, Check, Save, Loader2, Sparkles, RefreshCw } from 'lucide-react';
+import { Palette, Check, Save, Loader2, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { BUILT_IN_THEMES, DEFAULT_THEME, ThemeConfig } from '@/lib/themes';
 import PhonePreview, { BioLink, ProfileData } from '@/components/dashboard/PhonePreview';
@@ -113,8 +113,8 @@ export default function AppearancePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24 text-slate-400">
-        <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+      <div className="flex items-center justify-center py-24 text-[#71716E]">
+        <Loader2 className="w-7 h-7 animate-spin text-[#1E392A]" />
       </div>
     );
   }
@@ -126,12 +126,11 @@ export default function AppearancePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-              <Palette className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-2xl font-extrabold text-[#191919] tracking-tight flex items-center gap-2.5">
               <span>Themes & Appearance</span>
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Choose from 8 curated themes or customize background, fonts, and button shapes
+            <p className="text-xs text-[#71716E] mt-1">
+              Choose from signature curated themes or customize buttons, fonts, and colors
             </p>
           </div>
 
@@ -139,13 +138,13 @@ export default function AppearancePage() {
             type="button"
             disabled={saving}
             onClick={handleSaveTheme}
-            className="py-2.5 px-5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+            className="py-2.5 px-6 rounded-full bg-[#1E392A] hover:bg-[#14261C] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-transform active:scale-95 disabled:opacity-50"
           >
             {saving ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : saveSuccess ? (
               <>
-                <Check className="w-4 h-4" />
+                <Check className="w-4 h-4 stroke-[3]" />
                 <span>Saved!</span>
               </>
             ) : (
@@ -158,10 +157,14 @@ export default function AppearancePage() {
         </div>
 
         {/* 1. Curated Built-in Themes Grid */}
-        <div className="space-y-4">
-          <h2 className="text-sm font-bold text-slate-200 uppercase tracking-wider text-xs">
-            Curated Themes (8)
-          </h2>
+        <div className="p-6 rounded-[28px] bg-white border border-[#E5E5E3] shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold text-[#191919] uppercase tracking-wider">
+              Curated Themes ({BUILT_IN_THEMES.length})
+            </h2>
+            <span className="text-[11px] text-[#71716E]">Click to preview live</span>
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {BUILT_IN_THEMES.map((preset) => {
               const isSelected = activeTheme.id === preset.id;
@@ -170,10 +173,10 @@ export default function AppearancePage() {
                   key={preset.id}
                   type="button"
                   onClick={() => handleSelectPreset(preset)}
-                  className={`p-3 rounded-2xl border text-left transition-all relative flex flex-col justify-between h-36 ${
+                  className={`p-3 rounded-2xl border text-left transition-all relative flex flex-col justify-between h-36 overflow-hidden ${
                     isSelected
-                      ? 'border-emerald-500 ring-2 ring-emerald-500/30 shadow-xl'
-                      : 'border-slate-800 hover:border-slate-700 bg-slate-900/50'
+                      ? 'border-[#1E392A] ring-2 ring-[#1E392A]/20 shadow-md scale-[1.02]'
+                      : 'border-[#E5E5E3] hover:border-[#B5B5B0] hover:shadow-xs'
                   }`}
                   style={{ background: preset.background }}
                 >
@@ -181,14 +184,14 @@ export default function AppearancePage() {
                     <span
                       className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                       style={{
-                        background: preset.badgeBg || 'rgba(0,0,0,0.4)',
+                        background: preset.badgeBg || 'rgba(0,0,0,0.2)',
                         color: preset.pageTextColor,
                       }}
                     >
                       {preset.category}
                     </span>
                     {isSelected && (
-                      <div className="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow">
+                      <div className="w-5 h-5 rounded-full bg-[#1E392A] text-white flex items-center justify-center shadow-xs">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </div>
                     )}
@@ -196,7 +199,7 @@ export default function AppearancePage() {
 
                   {/* Mini button representation */}
                   <div
-                    className={`w-full py-2 px-2 text-[10px] text-center font-medium shadow-sm ${preset.buttonRadius}`}
+                    className={`w-full py-1.5 px-2 text-[10px] text-center font-semibold shadow-xs ${preset.buttonRadius}`}
                     style={{
                       background: preset.buttonBg,
                       color: preset.buttonTextColor,
@@ -219,14 +222,14 @@ export default function AppearancePage() {
         </div>
 
         {/* 2. Custom Style Controls */}
-        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-6">
-          <h2 className="text-sm font-bold text-white uppercase tracking-wider text-xs">
+        <div className="p-6 rounded-[28px] bg-white border border-[#E5E5E3] shadow-xs space-y-6">
+          <h2 className="text-xs font-bold text-[#191919] uppercase tracking-wider">
             Custom Appearance Controls
           </h2>
 
           {/* Button Shape */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-2">
+            <label className="block text-xs font-bold text-[#191919] mb-2">
               Button Shape
             </label>
             <div className="grid grid-cols-4 gap-2">
@@ -242,12 +245,12 @@ export default function AppearancePage() {
                   onClick={() =>
                     setActiveTheme((t) => ({ ...t, buttonRadius: s.radius, id: 'custom' }))
                   }
-                  className={`py-2.5 px-3 text-xs font-medium border text-center transition-all ${
+                  className={`py-2.5 px-3 text-xs font-semibold border text-center transition-all ${
                     s.radius
                   } ${
                     activeTheme.buttonRadius === s.radius
-                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 font-semibold'
-                      : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:text-white'
+                      ? 'border-[#1E392A] bg-[#1E392A] text-white shadow-xs'
+                      : 'border-[#E5E5E3] bg-[#FAF9F5] text-[#575753] hover:text-[#191919]'
                   }`}
                 >
                   {s.label}
@@ -258,7 +261,7 @@ export default function AppearancePage() {
 
           {/* Typography Choice */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-2">
+            <label className="block text-xs font-bold text-[#191919] mb-2">
               Font Family (Self-Hosted)
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -279,30 +282,26 @@ export default function AppearancePage() {
                   }
                   className={`py-2 px-3 rounded-xl border text-xs text-left transition-all ${
                     activeTheme.fontFamily === font
-                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold'
-                      : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:text-white'
+                      ? 'border-[#1E392A] bg-[#1E392A] text-white shadow-xs'
+                      : 'border-[#E5E5E3] bg-[#FAF9F5] text-[#575753] hover:text-[#191919]'
                   }`}
                 >
-                  {font}
+                  <span className="font-bold">{font}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Color Palettes */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {/* Custom Color Pickers */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
-                Page Background
+              <label className="block text-[11px] font-bold text-[#191919] mb-1.5">
+                Background Color
               </label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={
-                    activeTheme.background.startsWith('#')
-                      ? activeTheme.background
-                      : '#090d16'
-                  }
+                  value={activeTheme.background.startsWith('#') ? activeTheme.background : '#1e392a'}
                   onChange={(e) =>
                     setActiveTheme((t) => ({
                       ...t,
@@ -310,51 +309,22 @@ export default function AppearancePage() {
                       id: 'custom',
                     }))
                   }
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-9 h-9 rounded-xl border border-[#D8D8D5] cursor-pointer p-0.5 bg-white"
                 />
-                <span className="text-xs font-mono text-slate-300">
-                  {activeTheme.background.startsWith('#')
-                    ? activeTheme.background
-                    : 'Gradient'}
+                <span className="text-xs font-mono text-[#71716E]">
+                  {activeTheme.background.slice(0, 10)}
                 </span>
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
-                Page Text Color
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="color"
-                  value={activeTheme.pageTextColor}
-                  onChange={(e) =>
-                    setActiveTheme((t) => ({
-                      ...t,
-                      pageTextColor: e.target.value,
-                      id: 'custom',
-                    }))
-                  }
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
-                />
-                <span className="text-xs font-mono text-slate-300">
-                  {activeTheme.pageTextColor}
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
+              <label className="block text-[11px] font-bold text-[#191919] mb-1.5">
                 Button Color
               </label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={
-                    activeTheme.buttonBg.startsWith('#')
-                      ? activeTheme.buttonBg
-                      : '#1e293b'
-                  }
+                  value={activeTheme.buttonBg.startsWith('#') ? activeTheme.buttonBg : '#ffffff'}
                   onChange={(e) =>
                     setActiveTheme((t) => ({
                       ...t,
@@ -362,24 +332,22 @@ export default function AppearancePage() {
                       id: 'custom',
                     }))
                   }
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-9 h-9 rounded-xl border border-[#D8D8D5] cursor-pointer p-0.5 bg-white"
                 />
-                <span className="text-xs font-mono text-slate-300">
-                  {activeTheme.buttonBg.startsWith('#')
-                    ? activeTheme.buttonBg
-                    : 'Style'}
+                <span className="text-xs font-mono text-[#71716E]">
+                  {activeTheme.buttonBg.slice(0, 10)}
                 </span>
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1.5">
+              <label className="block text-[11px] font-bold text-[#191919] mb-1.5">
                 Button Text Color
               </label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={activeTheme.buttonTextColor}
+                  value={activeTheme.buttonTextColor.startsWith('#') ? activeTheme.buttonTextColor : '#1e392a'}
                   onChange={(e) =>
                     setActiveTheme((t) => ({
                       ...t,
@@ -387,10 +355,10 @@ export default function AppearancePage() {
                       id: 'custom',
                     }))
                   }
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-9 h-9 rounded-xl border border-[#D8D8D5] cursor-pointer p-0.5 bg-white"
                 />
-                <span className="text-xs font-mono text-slate-300">
-                  {activeTheme.buttonTextColor}
+                <span className="text-xs font-mono text-[#71716E]">
+                  {activeTheme.buttonTextColor.slice(0, 10)}
                 </span>
               </div>
             </div>
@@ -398,11 +366,11 @@ export default function AppearancePage() {
         </div>
       </div>
 
-      {/* Right Column: Live Phone Preview */}
+      {/* Right Column: Live Sticky Phone Preview */}
       <div className="hidden lg:block lg:col-span-5 sticky top-20">
         <div className="text-center mb-2">
-          <span className="text-[11px] font-semibold tracking-wider uppercase text-slate-400">
-            Appearance Live Preview
+          <span className="text-[11px] font-bold tracking-wider uppercase text-[#71716E]">
+            Live Preview
           </span>
         </div>
         <PhonePreview
