@@ -1,0 +1,435 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}</style><style>:root{color-scheme:light dark;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}}:root[data-theme="dark"]{color-scheme:dark;--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}:root[data-theme="light"]{color-scheme:light}@media print{:root,:root[data-theme="dark"]{color-scheme:light;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}}body{background:var(--md-bg);color:var(--md-text);max-width:720px;margin:0 auto;padding:32px;display:flex;flex-direction:column;gap:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;overflow-wrap:break-word}body>:first-child{margin-top:0}h1,h2,h3,h4,h5,h6{margin:6px 0 0;line-height:1.25;font-weight:600;text-wrap:balance}h1{font-size:1.35em}h2{font-size:1.15em;color:var(--md-muted)}h3,h4,h5,h6{font-size:1em}p,ul,ol,blockquote,table,pre,hr{margin:0}strong{font-weight:600}a{color:var(--md-link);text-decoration:none}a:hover{text-decoration:underline}ul,ol{display:flex;flex-direction:column;gap:6px;padding-left:22px}ul{list-style:disc}ol{list-style:decimal}:is(li,td,th)>*+:is(p,ul,ol,blockquote){margin-top:6px}blockquote{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--md-rule);padding-left:10px;color:var(--md-muted)}:not(pre)>code{background:var(--md-fill);padding:1px 3px;border-radius:4px;font:.92em 'SF Mono',ui-monospace,Menlo,Consolas,monospace}a>code{background:none;color:inherit}pre{background:var(--md-fill);padding:10px 12px;border-radius:6px;overflow-x:auto;font:12px/1.5 'SF Mono',ui-monospace,Menlo,Consolas,monospace;margin-block:4px}pre code{background:none;padding:0;font:inherit}table{width:100%;border-collapse:separate;border-spacing:2px;font:inherit}th,td{padding:6px 8px;border-radius:3px;text-align:left;vertical-align:top}th{background:var(--md-fill-strong);font-weight:600}td{background:var(--md-fill)}:is(th,td) :not(pre)>code{background:transparent}hr{border:0;border-top:1px solid var(--md-rule-strong);margin-block:10px}img{max-width:100%;height:auto;border-radius:4px}</style>
+</head><body>
+<h1>BioNest: Product Requirements Document and Build Prompt</h1>
+<p><strong>Version 1.0 · Status: Ready to build</strong></p>
+<hr>
+<h2>Part 1: PRD</h2>
+<h3>1. Overview</h3>
+<p><strong>BioNest</strong> is a link-in-bio tool. A person claims a username (for example <code>bionest.link/ada</code>) and gets one public page that holds all their links, so they can put a single link in their Instagram, TikTok, X or WhatsApp profile.</p>
+<p>It works like Linktree, with a few deliberate improvements aimed at people in Nigeria and across Africa.</p>
+<h3>2. Problem</h3>
+<ul>
+<li>Social platforms allow only one link in a profile.</li>
+<li>Linktree solves this but puts its own branding on free pages, gives very little free analytics, and charges in dollars.</li>
+<li>Creators and small businesses want a page that is clean, fast on weak data, and easy to contact them from (WhatsApp, phone).</li>
+</ul>
+<h3>3. Goals and non-goals</h3>
+<p><strong>Goals (v1)</strong></p>
+<ol>
+<li>A user can sign up, claim a username, and publish a working page in under 3 minutes.</li>
+<li>The public page loads fast on slow mobile data.</li>
+<li>Free users get a clean page with no BioNest branding and useful analytics.</li>
+<li>All data is real: real accounts, real stored links, real click tracking. No sample or placeholder data in the product.</li>
+</ol>
+<p><strong>Non-goals (v1)</strong></p>
+<ul>
+<li>Selling products, courses or taking payments from visitors</li>
+<li>Social media scheduling or auto-reply</li>
+<li>Team accounts</li>
+<li>Native mobile apps (the web app must work well on phones)</li>
+</ul>
+<h3>4. Target users</h3>
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th>Need</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creators (musicians, comedians, influencers)</td>
+<td>One link for all their content</td>
+</tr>
+<tr>
+<td>Small business owners (salons, caterers, tailors)</td>
+<td>A contact page with WhatsApp and phone buttons</td>
+</tr>
+<tr>
+<td>Freelancers and professionals</td>
+<td>A simple online presence without a website</td>
+</tr>
+</tbody>
+</table>
+<h3>5. What makes BioNest different (the &quot;slight changes&quot;)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Change</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>No BioNest branding on free pages</td>
+<td>Common complaint about the market leader</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Useful free analytics: clicks by day, country, referrer, device</td>
+<td>Free analytics elsewhere are close to a single total</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Built-in WhatsApp and phone buttons</td>
+<td>The main way people are contacted locally</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Link scheduling (show and hide links on dates)</td>
+<td>Promotions that end automatically</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Very light public page</td>
+<td>Works on weak 3G</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Naira pricing for the paid plan (phase 2)</td>
+<td>Dollar pricing is expensive locally</td>
+</tr>
+</tbody>
+</table>
+<h3>6. Functional requirements</h3>
+<p><strong>6.1 Accounts</strong></p>
+<ul>
+<li>Sign up and log in with email and password, and with Google.</li>
+<li>Email verification required before a page can be published.</li>
+<li>Password reset by email.</li>
+<li>Users can delete their account, which deletes all their data.</li>
+</ul>
+<p><strong>6.2 Username and page URL</strong></p>
+<ul>
+<li>Username: 3 to 30 characters, lowercase letters, numbers, underscore and hyphen. Must start with a letter or number.</li>
+<li>Must be unique. Availability is checked live while typing.</li>
+<li>Reserved names are blocked (for example: admin, login, signup, dashboard, api, help, support, settings, pricing, about, terms, privacy, app, www, bionest).</li>
+<li>Public page lives at <code>/{username}</code>.</li>
+</ul>
+<p><strong>6.3 Profile</strong></p>
+<ul>
+<li>Display name (up to 50 characters), bio (up to 160 characters).</li>
+<li>Profile photo upload (JPG, PNG or WebP, max 2 MB). The app resizes and compresses it on upload.</li>
+</ul>
+<p><strong>6.4 Links</strong></p>
+<ul>
+<li>Add, edit, delete, enable or disable, and drag-to-reorder links.</li>
+<li>Link types:
+<ul>
+<li><strong>Standard link</strong>: title and URL. URL must start with <code>https://</code> or <code>http://</code>. Other schemes (such as <code>javascript:</code>) are rejected.</li>
+<li><strong>WhatsApp</strong>: phone number in international format, optional pre-filled message. Opens <code>https://wa.me/{number}?text={message}</code>.</li>
+<li><strong>Phone</strong>: opens <code>tel:</code>.</li>
+<li><strong>Email</strong>: opens <code>mailto:</code>.</li>
+<li><strong>Header</strong>: a text divider, not clickable.</li>
+</ul>
+</li>
+<li>Optional per-link schedule: <code>show_from</code> and <code>show_until</code> date and time (stored in UTC, shown in the user's timezone).</li>
+<li>No hard limit on the number of links.</li>
+</ul>
+<p><strong>6.5 Social icons</strong></p>
+<ul>
+<li>A row of icons under the bio. Supported: Instagram, TikTok, X, YouTube, Facebook, LinkedIn, Snapchat, Telegram, Spotify, GitHub, Website.</li>
+<li>User enters a handle or URL for each, and the app builds the correct link.</li>
+</ul>
+<p><strong>6.6 Appearance</strong></p>
+<ul>
+<li>At least 8 built-in themes (background, button style, font, colors).</li>
+<li>Custom option: background color or gradient, button color, text color, button shape (square, rounded, pill), font choice from a short list.</li>
+<li>Live preview of the page while editing, shown in a phone frame next to the editor.</li>
+</ul>
+<p><strong>6.7 Sharing</strong></p>
+<ul>
+<li>Copy page link button.</li>
+<li>QR code generated for the page URL, downloadable as PNG and SVG.</li>
+</ul>
+<p><strong>6.8 Analytics (all real, recorded from actual visits)</strong></p>
+<ul>
+<li>Recorded events: <strong>page view</strong> and <strong>link click</strong>.</li>
+<li>Per event store: timestamp, link id (for clicks), country, referrer source, device type, and a daily-rotating anonymous visitor hash.</li>
+<li>Dashboard shows, for a selectable range (7 days, 30 days, 90 days):
+<ul>
+<li>Total views, total clicks, click-through rate</li>
+<li>Daily chart of views and clicks</li>
+<li>Top links by clicks</li>
+<li>Countries</li>
+<li>Referrers (Instagram, TikTok, WhatsApp, X, Facebook, YouTube, Direct, Other)</li>
+<li>Devices (mobile, desktop, tablet)</li>
+</ul>
+</li>
+<li>Bots and link-preview crawlers are filtered out.</li>
+<li>No IP addresses are stored.</li>
+</ul>
+<p><strong>6.9 Public page</strong></p>
+<ul>
+<li>Server-rendered so it loads quickly and works without heavy JavaScript.</li>
+<li>Proper title, description and social share image (Open Graph) per page.</li>
+<li>Page respects the schedule on links.</li>
+<li>Shows &quot;Page not found&quot; for unknown usernames.</li>
+<li>Small &quot;Report this page&quot; link for abuse.</li>
+</ul>
+<p><strong>6.10 Plans</strong></p>
+<ul>
+<li>Plan field exists on every account from day one: <code>free</code> or <code>pro</code>.</li>
+<li>v1 launch: everything above is available on Free. Pro is introduced in phase 2 (see roadmap).</li>
+</ul>
+<h3>7. Data model</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Key fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>profiles</code></td>
+<td>id (matches auth user), username (unique), display_name, bio, avatar_url, theme (JSON), plan, created_at</td>
+</tr>
+<tr>
+<td><code>links</code></td>
+<td>id, profile_id, type, title, url, whatsapp_number, message, position, is_active, show_from, show_until, created_at</td>
+</tr>
+<tr>
+<td><code>social_links</code></td>
+<td>id, profile_id, platform, url, position</td>
+</tr>
+<tr>
+<td><code>events</code></td>
+<td>id, profile_id, link_id (nullable), type (view or click), country, referrer, device, visitor_hash, created_at</td>
+</tr>
+<tr>
+<td><code>reports</code></td>
+<td>id, profile_id, reason, details, created_at</td>
+</tr>
+</tbody>
+</table>
+<p>Security rule: users can read and change only their own rows. Public visitors can read only active profile and link data through the public page. Only the server can write to <code>events</code>.</p>
+<h3>8. Pages and routes</h3>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>Landing page with sign up button</td>
+</tr>
+<tr>
+<td><code>/signup</code>, <code>/login</code>, <code>/reset-password</code></td>
+<td>Authentication</td>
+</tr>
+<tr>
+<td><code>/onboarding</code></td>
+<td>Claim username, add name and photo, add first link</td>
+</tr>
+<tr>
+<td><code>/dashboard</code></td>
+<td>Links editor with live phone preview</td>
+</tr>
+<tr>
+<td><code>/dashboard/appearance</code></td>
+<td>Themes and customization</td>
+</tr>
+<tr>
+<td><code>/dashboard/analytics</code></td>
+<td>Analytics</td>
+</tr>
+<tr>
+<td><code>/dashboard/settings</code></td>
+<td>Account, username, delete account</td>
+</tr>
+<tr>
+<td><code>/{username}</code></td>
+<td>Public page</td>
+</tr>
+<tr>
+<td><code>/go/{linkId}</code></td>
+<td>Records a click, then redirects to the destination</td>
+</tr>
+<tr>
+<td><code>/terms</code>, <code>/privacy</code></td>
+<td>Legal pages</td>
+</tr>
+</tbody>
+</table>
+<h3>9. Non-functional requirements</h3>
+<ul>
+<li><strong>Speed:</strong> public page under 100 KB of data transferred, loads in under 2 seconds on a slow 3G connection, Lighthouse performance score of 90 or higher on mobile.</li>
+<li><strong>Security:</strong> row-level security on all tables, URL validation on every link, rate limits on sign up, login, username checks and report submissions.</li>
+<li><strong>Privacy:</strong> no IP storage, no third-party ad trackers. Follow the Nigeria Data Protection Act. Provide a privacy notice and data deletion.</li>
+<li><strong>Accessibility:</strong> keyboard navigable, readable color contrast, alt text on images.</li>
+<li><strong>Reliability:</strong> click redirect must still work even if event recording fails.</li>
+</ul>
+<h3>10. Roadmap</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase 1 (MVP)</strong></td>
+<td>Everything in section 6 except paid plans</td>
+</tr>
+<tr>
+<td><strong>Phase 2</strong></td>
+<td>Pro plan billed in naira (Paystack), custom domains, extra themes, CSV export of analytics</td>
+</tr>
+<tr>
+<td><strong>Phase 3</strong></td>
+<td>Email collection block, link thumbnails, UTM builder, link shortener</td>
+</tr>
+</tbody>
+</table>
+<h3>11. Success metrics</h3>
+<ul>
+<li>Time from sign up to a published page: median under 3 minutes</li>
+<li>Share of sign-ups who publish a page: 60% or higher</li>
+<li>Weekly active page owners, and number of page views per page</li>
+<li>Mobile Lighthouse performance score: 90 or higher</li>
+</ul>
+<h3>12. Risks and open questions</h3>
+<table>
+<thead>
+<tr>
+<th>Risk or question</th>
+<th>Plan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abuse (phishing or scam pages)</td>
+<td>Report button, manual review, ability to disable a page</td>
+</tr>
+<tr>
+<td>Username squatting</td>
+<td>Reserved names, email verification, rate limits</td>
+</tr>
+<tr>
+<td>Domain name</td>
+<td>Confirm availability of the BioNest domain before launch (not yet checked)</td>
+</tr>
+<tr>
+<td>Pro pricing</td>
+<td>To decide before phase 2. Look at local willingness to pay first</td>
+</tr>
+<tr>
+<td>Legal</td>
+<td>Have a lawyer review terms and privacy notice before launch</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Part 2: Build prompt</h2>
+<p>Copy everything inside the box below into your AI coding tool (for example Claude Code, Cursor or Lovable).</p>
+<pre><code>You are a senior full-stack engineer. Build BioNest, a production-ready link-in-bio web app (similar to Linktree). This is a REAL build: no mock data, no seeded demo users, no hardcoded sample links, no fake analytics. Every screen must read and write real data in a real database. Empty states (for example &#34;You have no links yet&#34;) are shown when there is no data.
+
+## Tech stack
+- Next.js (App Router) with TypeScript and Tailwind CSS
+- Supabase for Postgres, Auth (email/password and Google), and Storage (avatars)
+- Row Level Security enabled on every table
+- Deploy target: Vercel
+- Libraries: dnd-kit (drag to reorder), zod (validation), qrcode (QR generation), recharts (analytics charts)
+- All secrets via environment variables. Provide a `.env.example`. Never commit secrets.
+
+## What to build
+
+### 1. Auth
+- Sign up, log in, log out, password reset, Google sign-in.
+- Require verified email before a page can be published.
+- Protect /dashboard/* routes. Redirect logged-out users to /login.
+- Account deletion in settings that deletes the user&#39;s profile, links, events and avatar file.
+
+### 2. Onboarding
+- After first login, send the user to /onboarding: choose username (live availability check, debounced), display name, optional photo, add first link.
+- Username rules: 3-30 chars, lowercase letters, numbers, underscore, hyphen; must start with a letter or number; unique; block reserved words: admin, login, signup, dashboard, api, help, support, settings, pricing, about, terms, privacy, app, www, bionest, go, onboarding, reset-password.
+
+### 3. Dashboard (/dashboard)
+- Left: links editor. Right: live phone-frame preview of the public page that updates as the user edits.
+- Link types: standard (https/http URL only; reject javascript:, data:, etc.), whatsapp (international number + optional prefilled message, builds https://wa.me/NUMBER?text=...), phone (tel:), email (mailto:), header (non-clickable divider text).
+- Add, edit, delete, enable/disable, drag-to-reorder (persist position).
+- Optional schedule per link: show_from and show_until (store UTC, display in user&#39;s timezone). Public page hides links outside their window.
+- Social icons row: Instagram, TikTok, X, YouTube, Facebook, LinkedIn, Snapchat, Telegram, Spotify, GitHub, Website. User enters a handle or URL; build the correct URL.
+- Profile: display name (max 50), bio (max 160), avatar upload (JPG/PNG/WebP, max 2 MB, resize and compress client-side or server-side before storing).
+- Copy-link button and QR code (download PNG and SVG).
+
+### 4. Appearance (/dashboard/appearance)
+- At least 8 built-in themes plus custom controls: background color or gradient, button color, text color, button shape (square, rounded, pill), font from a short list (use next/font, self-hosted, no external font requests at runtime).
+- Store theme as JSON on the profile. Preview updates live.
+
+### 5. Public page (/{username})
+- Server-rendered, minimal JavaScript, under 100 KB transferred, mobile-first. Target Lighthouse mobile performance 90+.
+- No BioNest branding on any page (free plan included). Only a small &#34;Report this page&#34; link.
+- Per-page metadata: title, description, Open Graph image (use avatar or generate one).
+- Unknown username shows a proper 404.
+- Each link button points to /go/{linkId}.
+- Record a &#34;view&#34; event on each page load (server-side, no client tracker script).
+
+### 6. Click tracking (/go/{linkId})
+- Route handler that looks up the link, records a &#34;click&#34; event, then returns a 302 redirect to the destination (or the wa.me / tel: / mailto: URL).
+- Redirect MUST still happen even if recording the event fails.
+- Respect schedule and is_active: if the link is not live, return 404.
+
+### 7. Analytics (/dashboard/analytics)
+- Range selector: 7, 30, 90 days.
+- Show: total views, total clicks, click-through rate, daily chart (views and clicks), top links, countries, referrers, devices.
+- Data comes only from the real `events` table, aggregated with SQL (use Postgres functions or views for performance).
+- Event fields: profile_id, link_id (nullable), type, country, referrer, device, visitor_hash, created_at.
+- Country: read from the hosting provider&#39;s geo header (on Vercel: x-vercel-ip-country).
+- Referrer: map the Referer header to Instagram, TikTok, WhatsApp, X, Facebook, YouTube, Direct, Other. Note that in-app browsers often hide the referrer; mark those as Direct.
+- Device: parse the User-Agent into mobile, tablet, desktop.
+- Visitor hash: SHA-256 of (IP + User-Agent + daily rotating salt + profile_id). Never store the raw IP.
+- Filter out bots, crawlers and link-preview fetchers (WhatsApp, Facebook, Twitter, Slack, Telegram previews, Googlebot, etc.).
+- Only the server (service role) may insert events. Users can only read events for their own profile.
+
+### 7b. Report abuse
+- /report form (or modal) saving to a `reports` table. Rate limited.
+
+### 8. Settings (/dashboard/settings)
+- Change display name, change username (re-validate, keep it unique), change email/password, delete account.
+
+### 9. Landing page (/)
+- Simple, fast marketing page: headline, short explanation, sign up button, three feature highlights (clean free pages, real analytics, WhatsApp buttons). Plus /terms and /privacy pages with clear placeholder legal text marked for lawyer review.
+
+## Database schema (Supabase SQL migration)
+Create tables with these columns (use uuid primary keys, timestamptz for times):
+- profiles: id (references auth.users), username (unique, citext or lower-case check), display_name, bio, avatar_url, theme jsonb, plan text default &#39;free&#39;, disabled boolean default false, created_at
+- links: id, profile_id, type (standard|whatsapp|phone|email|header), title, url, whatsapp_number, message, position int, is_active boolean default true, show_from timestamptz null, show_until timestamptz null, created_at
+- social_links: id, profile_id, platform, url, position
+- events: id, profile_id, link_id null, type (view|click), country, referrer, device, visitor_hash, created_at (index on profile_id, created_at)
+- reports: id, profile_id, reason, details, created_at
+
+RLS policies:
+- profiles/links/social_links: owner can select, insert, update, delete their own rows. Public read of only non-disabled profiles and active, currently-scheduled links for the public page (via server queries or a public view).
+- events: no client insert. Owners can select their own profile&#39;s events.
+- reports: anyone can insert (rate limited at the API level); only service role can read.
+- Storage bucket `avatars`: public read, authenticated users can write only inside their own folder.
+
+## Quality requirements
+- Validate all input with zod on both client and server. Sanitize all output.
+- Rate limit: sign up, login, username check, report submission, click route (basic per-IP limit).
+- Accessible: keyboard navigation, color contrast, alt text, focus states.
+- Responsive: dashboard works on phones.
+- Friendly error messages, loading states, and empty states everywhere.
+- Include automated tests for: username validation, URL validation, schedule logic, referrer mapping, bot filtering.
+- Write a README with: setup steps, env variables, how to run the Supabase migration, how to deploy to Vercel.
+
+## How to work
+1. First, show a short plan and the folder structure. Then build in this order: schema and RLS, auth and onboarding, links editor, public page, click tracking, analytics, appearance, settings, landing page, tests, README.
+2. After each step, run the app and the tests, and fix errors before moving on.
+3. Do not add any placeholder, demo, or fake data anywhere. If something needs a credential I have not provided, stop and tell me exactly which environment variable to set.
+4. When finished, list: what works, what is not done, and the steps I need to take myself (create Supabase project, set env variables, run migration, deploy).
+
+Do NOT build yet (later phases): paid plans and payments, custom domains, email collection, link shortener, team accounts.
+</code></pre>
+<hr>
+<p><em>Before launch: confirm the domain and social handles for &quot;BioNest&quot;, and have a lawyer review the terms and privacy notice. This document is not legal advice.</em></p>
+
+</body></html>
